@@ -19,6 +19,32 @@
 </body>
 
 <style>
+  body {
+    min-height: 100vh;
+    min-width: 100vh;
+    padding: 0;
+    height: auto;
+    width: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+  }
+
+  button,
+  button:focus {
+    outline: none;
+    background: transparent;
+    border: 1px solid transparent;
+  }
+
+  button:active {
+    outline: none;
+    background: transparent;
+    border: 1px solid grey;
+  }
+
   /* Works on Firefox */
   * {
     scrollbar-width: thin;
@@ -26,7 +52,28 @@
 
   /* Works on Chrome, Edge, and Safari */
   *::-webkit-scrollbar {
-    width: 12px;
+    width: 8px;
+    border-radius: 10px;
+  }
+
+  html::-webkit-scrollbar-track {
+    background: rgb(179, 177, 177);
+    border-radius: 10px;
+  }
+
+  html::-webkit-scrollbar-thumb {
+    background: rgb(136, 136, 136);
+    border-radius: 10px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: rgb(100, 100, 100);
+    border-radius: 10px;
+  }
+
+  *::-webkit-scrollbar-thumb:active {
+    background: rgb(68, 68, 68);
+    border-radius: 10px;
   }
 </style>
 
