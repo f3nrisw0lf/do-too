@@ -1,10 +1,10 @@
 <div class="d-none d-md-flex flex-column flex-shrink-0 p-3 bg-light vh-100" style="width: 280px;">
-  <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-    <!-- <svg class="bi pe-none me-2" width="40" height="32">
-      <use xlink:href="#bootstrap"></use>
-    </svg> -->
-    <!-- <span class="fs-4"><strong>Do-too</strong></span> -->
-    <h2 class="m-0">Do-too</h2>
+  <a href="./" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
+      <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z" />
+      <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
+    </svg>
+    <h2 class="ms-2 mb-0 text-dark">DoToo</h2>
   </a>
   <hr>
 
@@ -21,7 +21,7 @@
     else
       echo "<a href='./' class='nav-link' aria-current='page'>";
 
-    echo "All";
+    echo "<strong> All </strong>";
     echo "</a>";
     echo "</li>";
     // Render Accordions on Folders
@@ -30,14 +30,17 @@
       $name = $folder["name"];
       $todo_by_folder_query = mysqli_query($DB_CONNECTION, "SELECT * FROM todo WHERE folder_id = '$id'");
 
-      echo "<li class='nav-item'>";
+      echo "<li class='nav-item d-flex align-items-center'>";
 
       if ($folder_id == $id)
-        echo "<a href='?id=$id' class='nav-link active' aria-current='page'>";
+        echo "<a href='?id=$id' class='nav-link w-100 d-flex align-items-center active' aria-current='page'>";
       else
-        echo "<a href='?id=$id' class='nav-link' aria-current='page'>";
+        echo "<a href='?id=$id' class='nav-link w-100 d-flex text-dark align-items-center' aria-current='page'>";
 
-      echo $name;
+      echo '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-collection-fill me-2" viewBox="0 0 16 16">';
+      echo '<path d="M0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6v7zM2 3a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 0-1h-11A.5.5 0 0 0 2 3zm2-2a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7A.5.5 0 0 0 4 1z"/>';
+      echo '</svg>';
+      echo "<strong> $name </strong>";
       echo "</a>";
       echo "</li>";
     }
