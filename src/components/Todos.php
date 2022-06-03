@@ -68,7 +68,6 @@ function render_todo_modal($todo, $sub_todo_result) {
 }
 
 function render_todo_card($DB_CONNECTION, $todo_result) {
-  echo "<div class='pe-2 todo-list'>";
   echo "<ul class='list-group d-flex gap-1 todo-list p-1'>";
   while ($todo = mysqli_fetch_assoc($todo_result)) {
     $id = $todo["id"];
@@ -77,12 +76,11 @@ function render_todo_card($DB_CONNECTION, $todo_result) {
     render_todo_modal($todo, $sub_todo_result);
   }
   echo "</ul>";
-  echo "</div>";
 }
 ?>
 
 <div class="px-3 pt-3 w-100" style="background: radial-gradient(circle, rgba(244,206,207,0.2) 0%, rgba(182,233,219,0.01) 100%);">
-  <div class="p-2 h-100 overflow-auto">
+  <div class="p-3 h-100 overflow-auto ">
     <?php
     $folder_id = isset($_GET["id"]) ? $_GET["id"] : "";
 
@@ -105,6 +103,7 @@ function render_todo_card($DB_CONNECTION, $todo_result) {
       echo "<span class='badge bg-primary rounded-pill ms-2'>" . mysqli_num_rows($query_todo_with_folder) . "</span>";
       echo "</h3>";
 
+      echo "<div class='pe-2 h-100 todo-list d-flex flex-column justify-content-between'>";
       render_todo_card($DB_CONNECTION, $query_todo_with_folder);
     } else {
       $query_all_todos = mysqli_query($DB_CONNECTION, "SELECT * FROM todo WHERE user_id = 1");
@@ -114,6 +113,7 @@ function render_todo_card($DB_CONNECTION, $todo_result) {
       echo "<span class='badge bg-primary rounded-pill ms-2'>" . mysqli_num_rows($query_all_todos) . "</span>";
       echo "</h3>";
 
+      echo "<div class='pe-2 h-100 todo-list d-flex flex-column justify-content-between'>";
       render_todo_card($DB_CONNECTION, $query_all_todos);
     }
     ?>
@@ -122,13 +122,14 @@ function render_todo_card($DB_CONNECTION, $todo_result) {
     ?>
   </div>
 </div>
+</div>
 
 </div>
 
 <style>
   .todo-list {
     overflow-y: auto;
-    max-height: 85vh;
+    max-height: 90vh;
   }
 
   .todo-item:hover {

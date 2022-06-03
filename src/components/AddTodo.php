@@ -11,7 +11,7 @@ if ($todo) {
 }
 ?>
 
-<form action="" method="post" class="mt-3">
+<form action="" method="post" class="mt-3 p-1">
   <div class="input-group">
     <span class="input-group-text" name="todo" id="todo">Add Todo</span>
     <input type="text" class="form-control" name="todo" aria-label="todo" placeholder="Add a Task" aria-describedby="inputGroup-sizing-default">
