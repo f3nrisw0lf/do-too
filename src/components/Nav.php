@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-transparent navbar-light bg-light mb-auto">
+<nav class="navbar navbar-expand-lg bg-transparent navbar-light bg-light pb-3 border-bottom">
   <div class="container-fluid">
     <a class="navbar-brand" href="#"><strong>DoToo</strong></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,7 +17,10 @@
             <a class="nav-link active" aria-current="page" href="#">FAQs</a>
           </li>
           <li class="nav-item">
-            <a class="btn btn-outline-primary" aria-current="page" href="#">Login</a>
+            <a class="btn btn-outline-secondary" aria-current="page" href="#">Signup</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-primary" aria-current="page" href="#">Login</a>
           </li>
         </ul>
       </div>

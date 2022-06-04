@@ -20,11 +20,7 @@
 
 <style>
   body {
-    min-height: 100vh;
-    min-width: 100vh;
     padding: 0;
-    height: auto;
-    width: auto;
     position: absolute;
     top: 0;
     bottom: 0;
