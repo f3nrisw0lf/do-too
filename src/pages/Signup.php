@@ -1,4 +1,7 @@
 <?php
+
+$signup_sucess = false;
+
 if (isset($_POST["signup-submit"])) {
   if (empty($_POST["username"])) {
     $error["username"] = "Username Required";
@@ -9,6 +12,10 @@ if (isset($_POST["signup-submit"])) {
   if (empty($_POST["email"])) {
     $error["email"] = "Email Required";
   } else {
+    if (filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL) === false) {
+      $error["email"] = "Invalid Email";
+    }
+
     $input["email"] = $_POST["email"];
   }
 
@@ -17,28 +24,38 @@ if (isset($_POST["signup-submit"])) {
   } else {
     $input["password"] = $_POST["password"];
   }
+
+  if (empty($error["username"]) and empty($error["email"]) and empty($error["password"])) {
+    $username = $input["username"];
+    $email = $input["email"];
+    $password = $input["password"];
+    $signup_query = mysqli_query($DB_CONNECTION, "INSERT INTO user(username, password, email) VALUES('$username', '$password', '$email')");
+    $signup_success = true;
+  }
 }
 ?>
 
 <div class="d-flex justify-content-center align-self-center h-100">
-  <main class="w-50 d-flex flex-column gap-4" style="resize: both; overflow: auto;">
+  <main class="w-50 d-flex flex-column gap-4 " style="resize: both; overflow:
+    auto;">
     <?php include_once('src/components/Nav.php'); ?>
 
-    <form class="card p-5 m-2 shadow-sm needs-validation" method="post" novalidate>
+    <form class="card p-5 m-2 shadow-sm needs-validation <?php if ($signup_success) echo " d-none" ?>" method="post"
+      novalidate>
       <h2 class="text-center"><strong>Login</strong></h2>
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Username</label>
-        <input type="email" name="email" class="form-control <?php if (isset($error["username"])) echo "is-invalid";
-                                                              else echo "is-valid" ?>" id="exampleInputEmail1"
-          aria-describedby="emailHelp"
+        <input type="text" name="username"
+          class="form-control <?php echo (isset($error["username"])) ? "is-invalid" : "is-valid" ?>"
+          id="exampleInputEmail1" aria-describedby="emailHelp"
           value=<?php if (isset($input["username"])) echo htmlentities($input["username"]) ?>>
         <div class="invalid-feedback"><?php if (isset($error["username"])) echo htmlentities($error["username"]); ?>
         </div>
       </div>
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input type="email" name="email" class="form-control <?php if (isset($error["email"])) echo "is-invalid";
-                                                              else echo "is-valid" ?>" id="exampleInputEmail1"
+        <input type="email" name="email" class="form-control <?php echo (isset($error["email"])) ? "is-invalid" :
+                                                                "is-valid" ?>" id="exampleInputEmail1"
           aria-describedby="emailHelp" value=<?php if (isset($input["email"])) echo htmlentities($input["email"]) ?>>
         <div class="invalid-feedback"><?php if (isset($error["email"])) echo htmlentities($error["email"]); ?></div>
       </div>
@@ -57,9 +74,10 @@ if (isset($_POST["signup-submit"])) {
       </div>
       <button type="submit" name="signup-submit" class="btn btn-primary">Submit</button>
       <a href="/Signup" class="text-center mt-2">Don't have an account yet?</a>
-
     </form>
-
+    <div class="alert alert-success <?php echo ($signup_success) ? "d-block" : "d-none" ?>" role="alert">
+      Signup success!
+    </div>
   </main>
 </div>
 
