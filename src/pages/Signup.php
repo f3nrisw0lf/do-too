@@ -2,6 +2,8 @@
 
 $signup_sucess = false;
 
+include_once("src/db_connection.php");
+
 if (isset($_POST["signup-submit"])) {
   if (empty($_POST["username"])) {
     $error["username"] = "Username Required";
@@ -42,28 +44,29 @@ if (isset($_POST["signup-submit"])) {
 
     <form class="card p-5 m-2 shadow-sm needs-validation <?php if ($signup_success) echo " d-none" ?>" method="post"
       novalidate>
-      <h2 class="text-center"><strong>Login</strong></h2>
+      <h2 class="text-center"><strong>Signup</strong></h2>
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Username</label>
         <input type="text" name="username"
-          class="form-control <?php echo (isset($error["username"])) ? "is-invalid" : "is-valid" ?>"
-          id="exampleInputEmail1" aria-describedby="emailHelp"
+          class="form-control <?php if (isset($error["username"])) echo "is-invalid";
+                                                                else if (isset($input["username"])) echo "is-valid"; ?>" id="exampleInputEmail1"
+          aria-describedby="emailHelp"
           value=<?php if (isset($input["username"])) echo htmlentities($input["username"]) ?>>
         <div class="invalid-feedback"><?php if (isset($error["username"])) echo htmlentities($error["username"]); ?>
         </div>
       </div>
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input type="email" name="email" class="form-control <?php echo (isset($error["email"])) ? "is-invalid" :
-                                                                "is-valid" ?>" id="exampleInputEmail1"
+        <input type="email" name="email" class="form-control <?php if (isset($error["email"])) echo "is-invalid";
+                                                              else if (isset($input["email"])) echo "is-valid"; ?>"
           aria-describedby="emailHelp" value=<?php if (isset($input["email"])) echo htmlentities($input["email"]) ?>>
         <div class="invalid-feedback"><?php if (isset($error["email"])) echo htmlentities($error["email"]); ?></div>
       </div>
       <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" name="password" class="form-control <?php if (isset($error["password"])) echo "is-invalid";
-                                                                    else echo "is-valid" ?>" id="exampleInputEmail1"
-          aria-describedby="passwordHelp"
+        <input type="password" name="password"
+          class="form-control <?php if (isset($error["password"])) echo "is-invalid";
+                                                                    else if (isset($input["password"])) echo "is-valid"; ?>" aria-describedby="passwordHelp"
           value=<?php if (isset($input["password"])) echo htmlentities($input["password"]) ?>>
         <div class="invalid-feedback"><?php if (isset($error["password"])) echo htmlentities($error["password"]); ?>
         </div>
@@ -73,10 +76,11 @@ if (isset($_POST["signup-submit"])) {
         <?php if (isset($error["login"])) echo $error["login"] ?>
       </div>
       <button type="submit" name="signup-submit" class="btn btn-primary">Submit</button>
-      <a href="/Signup" class="text-center mt-2">Don't have an account yet?</a>
+      <a href="/do-too/login" class="text-center mt-2">Already have an account?</a>
     </form>
     <div class="alert alert-success <?php echo ($signup_success) ? "d-block" : "d-none" ?>" role="alert">
       Signup success!
+      <a href="./" class="text-center">Go to Home...</a>
     </div>
   </main>
 </div>

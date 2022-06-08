@@ -3,6 +3,8 @@
 $email_valid = $password_valid = NULL;
 $input = [];
 
+require_once("src/db_connection.php");
+
 if (isset($_POST["login-submit"])) {
   if (empty($_POST["email"])) {
     $error["email"] = "Email Required";
@@ -47,14 +49,16 @@ if (isset($_POST["login-submit"])) {
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Email address</label>
         <input type="email" name="email" class="form-control <?php if (isset($error["email"])) echo "is-invalid";
-                                                              else echo "is-valid" ?>" id="exampleInputEmail1"
-          aria-describedby="emailHelp" value=<?php if (isset($input["email"])) echo htmlentities($input["email"]) ?>>
+                                                              else if (isset($input["email"])) echo "is-valid" ?>"
+          id="exampleInputEmail1" aria-describedby="emailHelp"
+          value=<?php if (isset($input["email"])) echo htmlentities($input["email"]) ?>>
         <div class="invalid-feedback"><?php if (isset($error["email"])) echo htmlentities($error["email"]); ?></div>
       </div>
       <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" name="password" class="form-control <?php if (isset($error["password"])) echo "is-invalid";
-                                                                    else echo "is-valid" ?>" id="exampleInputEmail1"
+        <input type="password" name="password"
+          class="form-control <?php if (isset($error["password"])) echo "is-invalid";
+                                                                    else if (isset($input["password"])) echo "is-valid" ?>" id="exampleInputEmail1"
           aria-describedby="passwordHelp"
           value=<?php if (isset($input["password"])) echo htmlentities($input["password"]) ?>>
         <div class="invalid-feedback"><?php if (isset($error["password"])) echo htmlentities($error["password"]); ?>
@@ -69,7 +73,7 @@ if (isset($_POST["login-submit"])) {
         <label class="form-check-label" for="exampleCheck1">Remember me</label>
       </div>
       <button type="submit" name="login-submit" class="btn btn-primary">Submit</button>
-      <a href="/Signup" class="text-center mt-2">Don't have an account yet?</a>
+      <a href="/do-too/signup" class="text-center mt-2">Don't have an account yet?</a>
 
     </form>
 
