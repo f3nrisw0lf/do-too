@@ -1,5 +1,6 @@
 <?php
 
+$user_id = $_SESSION["user_id"];
 $delete_todo_id = filter_input(INPUT_GET, 'delete_id', FILTER_SANITIZE_NUMBER_INT);
 
 if (isset($delete_todo_id)) {
@@ -79,7 +80,8 @@ function render_todo_card($DB_CONNECTION, $todo_result) {
 }
 ?>
 
-<div class="px-3 pt-3 w-100" style="background: radial-gradient(circle, rgba(244,206,207,0.2) 0%, rgba(182,233,219,0.01) 100%);">
+<div class="px-3 pt-3 w-100"
+  style="background: radial-gradient(circle, rgba(244,206,207,0.2) 0%, rgba(182,233,219,0.01) 100%);">
   <div class="p-3 h-100 overflow-auto ">
     <?php
     $folder_id = isset($_GET["id"]) ? $_GET["id"] : "";
@@ -96,7 +98,7 @@ function render_todo_card($DB_CONNECTION, $todo_result) {
 
     <?php
     if ($folder_id) {
-      $query_todo_with_folder = mysqli_query($DB_CONNECTION, "SELECT * FROM todo WHERE user_id = 1 AND folder_id = $folder_id");
+      $query_todo_with_folder = mysqli_query($DB_CONNECTION, "SELECT * FROM todo WHERE user_id = $user_id AND folder_id = $folder_id");
 
       echo "<h3 class='d-flex align-items-center'>";
       echo $folder_name;
@@ -106,7 +108,7 @@ function render_todo_card($DB_CONNECTION, $todo_result) {
       echo "<div class='pe-2 h-100 todo-list d-flex flex-column justify-content-between'>";
       render_todo_card($DB_CONNECTION, $query_todo_with_folder);
     } else {
-      $query_all_todos = mysqli_query($DB_CONNECTION, "SELECT * FROM todo WHERE user_id = 1");
+      $query_all_todos = mysqli_query($DB_CONNECTION, "SELECT * FROM todo WHERE user_id = $user_id");
 
       echo "<h3 class='d-flex align-items-center'>";
       echo $folder_name;
@@ -127,21 +129,21 @@ function render_todo_card($DB_CONNECTION, $todo_result) {
 </div>
 
 <style>
-  .todo-list {
-    overflow-y: auto;
-    max-height: 90vh;
-  }
+.todo-list {
+  overflow-y: auto;
+  max-height: 90vh;
+}
 
-  .todo-item:hover {
-    background-color: #eef6f4;
-  }
+.todo-item:hover {
+  background-color: #eef6f4;
+}
 
-  #delete-todo-button {
-    background-color: #fdece7;
-    border: 1px solid #eceeef;
-  }
+#delete-todo-button {
+  background-color: #fdece7;
+  border: 1px solid #eceeef;
+}
 
-  #delete-todo-button:hover {
-    background-color: #f2724d;
-  }
+#delete-todo-button:hover {
+  background-color: #f2724d;
+}
 </style>

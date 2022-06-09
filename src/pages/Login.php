@@ -28,13 +28,15 @@ if (isset($_POST["login-submit"])) {
       $error["login"] = "Email not existing!";
     } else {
       while ($row = mysqli_fetch_assoc($login_query)) {
+        $db_id = $row["id"];
         $db_email = $row["email"];
         $db_password = $row["password"];
       }
 
       // Check if query password is same to the inputted password
       if ($password == $db_password) {
-        echo "AUTH";
+        $_SESSION["user_id"] = $db_id;
+        header("Location: /do-too");
       }
     };
   }

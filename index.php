@@ -12,12 +12,24 @@
 
 <body class="">
   <?php
+  session_start();
   include_once("src/Route.php");
 
   Route::add('/', function () {
     include_once("src/db_connection.php");
-    include_once("src/pages/Landing.php");
+    if (isset($_SESSION["user_id"])) {
+      include_once("src/pages/Me.php");
+    } else
+      include_once("src/pages/Landing.php");
   });
+
+  Route::add('/', function () {
+    include_once("src/db_connection.php");
+    if (isset($_SESSION["user_id"])) {
+      include_once("src/pages/Me.php");
+    } else
+      include_once("src/pages/Landing.php");
+  }, 'post');
 
   Route::add('/login', function () {
     include_once("src/pages/Login.php");
@@ -34,6 +46,11 @@
   Route::add('/signup', function () {
     include_once("src/pages/Signup.php");
   }, 'post');
+
+  Route::add('/logout', function () {
+    $_SESSION["user_id"] = NULL;
+    header("Location: /do-too");
+  });
 
   Route::pathNotFound(function ($path) {
     echo "<div style='text-align: center; font-family: sans-serif; padding: 3rem;'>";
