@@ -4,12 +4,8 @@ $todo = filter_input(INPUT_POST, 'todo', FILTER_SANITIZE_ADD_SLASHES);
 $folder_id = isset($_GET["id"]) ? filter_input(INPUT_GET, 'id', FILTER_SANITIZE_ADD_SLASHES) : NULL;
 $current_date = date("Y/m/d");
 
-if ($todo) {
-  if ($folder_id)
-    mysqli_query($DB_CONNECTION, "INSERT INTO todo(user_id, folder_id, content, creation_date) VALUES ($user_id, $folder_id, '$todo', '$current_date')");
-  else
-    mysqli_query($DB_CONNECTION, "INSERT INTO todo(user_id, content, creation_date) VALUES ($user_id, '$todo', '$current_date')");
-}
+if (isset($todo))
+  $pdo->query(isset($folder_id) ? "INSERT INTO todo(user_id, folder_id, content, creation_date) VALUES ($user_id, $folder_id, '$todo', '$current_date')" :  "INSERT INTO todo(user_id, content, creation_date) VALUES ($user_id, '$todo', '$current_date')");
 ?>
 
 <form action="" method="post" class="mt-3 p-1">

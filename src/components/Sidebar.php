@@ -15,7 +15,7 @@
     <?php
     // NOTED - USER ID must be the id of the logged user
     $folder_id = isset($_GET["id"]) ? $_GET["id"] : "";
-    $folder_user_query = mysqli_query($DB_CONNECTION, "SELECT * FROM folder WHERE user_id = 1");
+    $folder_user_query =  $pdo->query("SELECT * FROM folder WHERE user_id = 1");
 
     echo "<li class='nav-item'>";
 
@@ -31,10 +31,10 @@
     echo "</a>";
     echo "</li>";
     // Render Accordions on Folders
-    while ($folder = mysqli_fetch_assoc($folder_user_query)) {
+    foreach ($folder_user_query as $folder) {
       $id = $folder["id"];
       $name = $folder["name"];
-      $todo_by_folder_query = mysqli_query($DB_CONNECTION, "SELECT * FROM todo WHERE folder_id = '$id'");
+      $todo_by_folder_query = $pdo->query("SELECT * FROM todo WHERE folder_id = '$id'");
 
       echo "<li class='nav-item d-flex align-items-center'>";
 

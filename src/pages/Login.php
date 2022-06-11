@@ -21,17 +21,16 @@ if (isset($_POST["login-submit"])) {
   if (isset($input["email"]) and isset($input["password"])) {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
-    $login_query = mysqli_query($DB_CONNECTION, "SELECT * FROM user WHERE email = '$email' LIMIT 1");
+    $login_query = $pdo->query("SELECT * FROM user WHERE email = '$email' LIMIT 1");
 
     // Check if Email Exists
-    if (mysqli_num_rows($login_query) == 0) {
+    if ($login_query->rowCount() == 0) {
       $error["login"] = "Email not existing!";
     } else {
-      while ($row = mysqli_fetch_assoc($login_query)) {
-        $db_id = $row["id"];
-        $db_email = $row["email"];
-        $db_password = $row["password"];
-      }
+      $db_user = $login_query->fetch(PDO::FETCH_ASSOC);
+      $db_id = $db_user["id"];
+      $db_email = $db_user["email"];
+      $db_password = $db_user["password"];
 
       // Check if query password is same to the inputted password
       if ($password == $db_password) {

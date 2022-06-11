@@ -31,8 +31,7 @@ if (isset($_POST["signup-submit"])) {
     $username = $input["username"];
     $email = $input["email"];
     $password = $input["password"];
-    $signup_query = mysqli_query($DB_CONNECTION, "INSERT INTO user(username, password, email) VALUES('$username', '$password', '$email')");
-    $signup_success = true;
+    $signup_query = $pdo->exec("INSERT INTO user(username, password, email) VALUES('$username', '$password', '$email')");
   }
 }
 ?>
@@ -42,7 +41,7 @@ if (isset($_POST["signup-submit"])) {
     auto;">
     <?php include_once('src/components/Nav.php'); ?>
 
-    <form class="card p-5 m-2 shadow-sm needs-validation <?php if ($signup_success) echo " d-none" ?>" method="post"
+    <form class="card p-5 m-2 shadow-sm needs-validation <?php if ($signup_query) echo " d-none" ?>" method="post"
       novalidate>
       <h2 class="text-center"><strong>Signup</strong></h2>
       <div class="mb-3">
