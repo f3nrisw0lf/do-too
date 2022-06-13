@@ -13,57 +13,70 @@
 
   <ul class="nav nav-pills flex-column mb-auto">
     <?php
-    // NOTED - USER ID must be the id of the logged user
-    $folder_id = isset($_GET["id"]) ? $_GET["id"] : "";
-    $folder_user_query =  $pdo->query("SELECT * FROM folder WHERE user_id = 1");
+    $folder_id = $_GET["folder_id"] ?? "";
+    ?>
+    <li class='nav-item'>
+      <a href='./' class='nav-link <?= empty($folder_id) ? "active" : "" ?>' aria-current='page'>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive-fill"
+          viewBox="0 0 16 16">
+          <path
+            d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15h9.286zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1zM.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8H.8z" />
+        </svg>
+        <strong> All </strong>
+      </a>
+    </li>
 
-    echo "<li class='nav-item'>";
+    <?php foreach ($pdo->query("SELECT * FROM folder WHERE user_id = {$_SESSION["user_id"]}") as $folder) : ?>
+    <li class='nav-item d-flex align-items-center'>
+      <a href='?folder_id=<?= htmlentities(ucfirst($folder["id"])) ?>'
+        class='nav-link w-100 d-flex align-items-center <?= $folder["id"] ==  $folder_id ? "active" : "text-dark" ?>'
+        aria-current='page'>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+          class="bi bi-collection-fill me-2" viewBox="0 0 16 16">
 
-    if ($folder_id == "")
-      echo "<a href='./' class='nav-link active' aria-current='page'>";
-    else
-      echo "<a href='./' class='nav-link' aria-current='page'>";
+          <path
+            d="M0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6v7zM2 3a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 0-1h-11A.5.5 0 0 0 2 3zm2-2a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7A.5.5 0 0 0 4 1z" />
 
-    echo '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive-fill" viewBox="0 0 16 16">';
-    echo '<path d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15h9.286zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1zM.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8H.8z"/>';
-    echo '</svg>';
-    echo "<strong> All </strong>";
-    echo "</a>";
-    echo "</li>";
-    // Render Accordions on Folders
-    foreach ($folder_user_query as $folder) {
-      $id = $folder["id"];
-      $name = $folder["name"];
-      $todo_by_folder_query = $pdo->query("SELECT * FROM todo WHERE folder_id = '$id'");
+        </svg>
+        <strong class=''> <?= htmlentities($folder["name"]) ?> </strong>
+      </a>
+    </li>
+    </li>
+    <?php endforeach ?>
+  </ul>
+  <form action="" method="post">
+    <?php
+    if (isset($_POST["new-folder-button"])) {
+      $new_folder_count = $pdo->query("SELECT * FROM folder WHERE name = 'New Folder'")->rowCount();
 
-      echo "<li class='nav-item d-flex align-items-center'>";
-
-      if ($folder_id == $id)
-        echo "<a href='?id=$id' class='nav-link w-100 d-flex align-items-center active' aria-current='page'>";
-      else
-        echo "<a href='?id=$id' class='nav-link w-100 d-flex text-dark align-items-center' aria-current='page'>";
-
-      echo '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-collection-fill me-2" viewBox="0 0 16 16">';
-      echo '
-            <path d="M0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6v7zM2 3a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 0-1h-11A.5.5 0 0 0 2 3zm2-2a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7A.5.5 0 0 0 4 1z" />';
-      echo '
-          </svg>';
-      echo "<strong> $name </strong>";
-      echo "</a>";
-      echo "</li>";
+      if ($new_folder_count == 0) {
+        $pdo->query("INSERT INTO folder(user_id, name) VALUES({$_SESSION["user_id"]}, 'New Folder')");
+        header("./");
+      } else $error["add_folder"] = "Rename New Folder First";
     }
     ?>
-  </ul>
+
+    <?php if (isset($error["add_folder"])) : ?>
+    <div class="alert alert-warning mb-2 d-flex align-items-center gap-2 text-dark" role="alert">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+        class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+        <path
+          d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+      </svg>
+      <?= htmlentities($error["add_folder"]) ?>
+    </div>
+    <?php endif ?>
+
+    <input type="submit" name="new-folder-button" class="btn btn-outline-secondary w-100" value="+ New Folder">
+  </form>
   <hr>
   <div class="dropdown">
     <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2"
       data-bs-toggle="dropdown" aria-expanded="false">
       <img src="https://github.com/mdo.png" alt="" class="rounded-circle me-2" width="32" height="32">
-      <strong>mdo</strong>
+      <strong><?= ucfirst($pdo->query("SELECT * FROM user WHERE id = {$_SESSION['user_id']}")->fetch(PDO::FETCH_ASSOC)["username"]) ?></strong>
     </a>
     <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-      <li><a class="dropdown-item" href="#">New project...</a></li>
-      <li><a class="dropdown-item" href="#">Settings</a></li>
       <li><a class="dropdown-item" href="#">Profile</a></li>
       <li>
         <hr class="dropdown-divider">

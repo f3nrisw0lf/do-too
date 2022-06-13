@@ -5,7 +5,8 @@
     <section class="text-center mt-5">
       <img src="./assets/svg/phone_list.svg" class="my-4 w-50 mx-auto" alt="" srcset="">
       <h1>Ut enim ad minim veniam</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+      <p class="">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+        dolore magna aliqua. </p>
     </section>
     <div class="row my-5 p-0">
       <div class="col-lg-4 text-center">
