@@ -10,7 +10,8 @@
     </section>
     <div class="row my-5 p-0">
       <div class="col-lg-4 text-center">
-        <svg class="bd-placeholder-img rounded-circle" width="120" height="120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
+        <svg class="bd-placeholder-img rounded-circle" width="120" height="120" xmlns="http://www.w3.org/2000/svg"
+          role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
           <title>Placeholder</title>
           <rect width="100%" height="100%" fill="#777"></rect><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text>
         </svg>
@@ -20,7 +21,8 @@
         <p><a class="btn btn-outline-secondary" href="#">View details »</a></p>
       </div><!-- /.col-lg-4 -->
       <div class="col-lg-4 text-center">
-        <svg class="bd-placeholder-img rounded-circle" width="120" height="120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
+        <svg class="bd-placeholder-img rounded-circle" width="120" height="120" xmlns="http://www.w3.org/2000/svg"
+          role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
           <title>Placeholder</title>
           <rect width="100%" height="100%" fill="#777"></rect><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text>
         </svg>
@@ -30,7 +32,8 @@
         <p><a class="btn btn-outline-secondary" href="#">View details »</a></p>
       </div><!-- /.col-lg-4 -->
       <div class="col-lg-4 text-center">
-        <svg class="bd-placeholder-img rounded-circle" width="120" height="120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
+        <svg class="bd-placeholder-img rounded-circle" width="120" height="120" xmlns="http://www.w3.org/2000/svg"
+          role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
           <title>Placeholder</title>
           <rect width="100%" height="100%" fill="#777"></rect><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text>
         </svg>
@@ -44,13 +47,13 @@
 </div>
 
 <style>
-  #landing {
-    width: 50%;
-  }
+#landing {
+  width: 50%;
+}
 
-  @media only screen and (max-width: 768px) {
-    #landing {
-      width: 90%;
-    }
+@media only screen and (max-width: 768px) {
+  #landing {
+    width: 90%;
   }
+}
 </style>

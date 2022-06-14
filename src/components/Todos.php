@@ -1,10 +1,17 @@
 <?php
 
+
 $user_id = $_SESSION["user_id"];
+$todo_focus_id = -1;
 $folder_id = $_GET["folder_id"] ?? null;
+$current_date = date("Y/m/d");
+
+$sub_todo = filter_input(INPUT_POST, 'sub-todo', FILTER_SANITIZE_ADD_SLASHES);
+$todo_id = filter_input(INPUT_POST, 'todo-id', FILTER_SANITIZE_NUMBER_INT);
 
 $delete_todo_id = filter_input(INPUT_GET, 'delete_id', FILTER_SANITIZE_NUMBER_INT);
 $done_todo_id = filter_input(INPUT_GET, 'done_id', FILTER_SANITIZE_NUMBER_INT);
+$sub_done_id = filter_input(INPUT_GET, 'sub_done_id', FILTER_SANITIZE_NUMBER_INT);
 
 function render_checkbox($todo_is_done) {
   if ($todo_is_done) {
@@ -21,16 +28,27 @@ function render_checkbox($todo_is_done) {
 
 if (isset($delete_todo_id)) {
   $pdo->query("DELETE FROM todo WHERE id=$delete_todo_id");
+  header("Location: ./");
 }
 
 if (isset($done_todo_id)) {
   $pdo->query("UPDATE todo SET is_done = NOT is_done WHERE id = $done_todo_id");
+  header("Location: ./");
 }
 
-$query_todo = $pdo->query($folder_id ? "SELECT * FROM todo WHERE user_id = $user_id AND folder_id = $folder_id" : "SELECT * FROM todo WHERE user_id = $user_id");
+if (isset($sub_done_id)) {
+  $pdo->query("UPDATE sub_todo SET is_done = NOT is_done WHERE id = $sub_done_id");
+  // header("Location: ./");
+}
+
+if (isset($sub_todo)) {
+  $pdo->query("INSERT INTO sub_todo(todo_id, content, creation_date) VALUES ('$todo_id', '$sub_todo', '$current_date')");
+  $todo_focus_id = $todo_id;
+}
+
+$query_todo = $pdo->query("SELECT * FROM todo WHERE user_id = $user_id " . ($folder_id ? "AND folder_id = $folder_id " : "")  . "ORDER BY is_done");
 
 $folder_name = $folder_id ? $pdo->query("SELECT * FROM folder WHERE id = $folder_id")->fetch(PDO::FETCH_ASSOC)["name"] : "All";
-
 ?>
 
 <div class="px-3 pt-3 w-100"
@@ -61,12 +79,13 @@ $folder_name = $folder_id ? $pdo->query("SELECT * FROM folder WHERE id = $folder
           <!-- Modal Button -->
           <button type='button'
             class='w-100 btn-outline-transparent bg-transparent text-black border p-3 border-black border-left-0 d-flex justify-content-between align-items-center '
-            data-bs-toggle='modal' data-bs-target='<?= "#modal-" . $todo["id"] ?>'>
+            id='<?= "modal-button-" . $todo["id"] ?>' data-bs-toggle='modal'
+            data-bs-target='<?= "#modal-" . $todo["id"] ?>'>
             <div class='text-start <?= (bool)$todo["is_done"] ? "text-decoration-line-through" : "" ?>'>
-              <h5 class='text-dark'>
+              <h5 class='text-dark align-self-center'>
                 <strong> <?= htmlentities($todo["title"]) ?> </strong>
               </h5>
-              <p> <?= htmlentities($todo["content"]) ?> </p>
+              <p class='opacity-50'> <?= htmlentities($todo["content"] ?? "Description...") ?> </p>
             </div>
             <span class='badge bg-secondary ms-2'> <?= $sub_todo_query->rowCount(); ?></span>
           </button>
@@ -93,15 +112,16 @@ $folder_name = $folder_id ? $pdo->query("SELECT * FROM folder WHERE id = $folder
               <button type='button' class='btn-close align-self-end' data-bs-dismiss='modal'
                 aria-label='Close'></button>
               <div class='modal-body px-0 mb-2'>
-                <h3><?= htmlentities($todo["title"]) ?? "Title" ?></h3>
-                <p><?= htmlentities($todo["content"]) ?></p>
+                <h3><?= htmlentities($todo["title"]) ?></h3>
                 <!-- Sub Todos -->
                 <?php if ($sub_todo_query->rowCount()) : ?>
                 <ul class='list-group list-group-flush justify-content-center'>
                   <?php foreach ($sub_todo_query as $sub_todo) : ?>
                   <div>
-                    <li class='list-group-item border-0 p-0'>
-                      <input class='form-check-input' type='checkbox' id='checkboxNoLabel' value='' aria-label='...'>
+                    <li class='list-group-item border-0 p-0 d-flex gap-2'>
+                      <a href='./?sub_done_id=<?= $sub_todo["id"] ?>' class='align-self-center'>
+                        <?= render_checkbox($sub_todo["is_done"]) ?>
+                      </a>
                       <?= htmlentities($sub_todo["content"]) ?>
                     </li>
                   </div>
@@ -118,6 +138,16 @@ $folder_name = $folder_id ? $pdo->query("SELECT * FROM folder WHERE id = $folder
                 </div>
 
                 <?php endif ?>
+                <form action="" method="post" class="mt-3 p-1">
+                  <div class="input-group">
+                    <span class="input-group-text" name="sub-todo" id="todo">+ Add</span>
+                    <input type="text" class="form-control" name="sub-todo" aria-label="todo"
+                      placeholder="Add a subtask" aria-describedby="inputGroup-sizing-default">
+                    <input type="hidden" class="form-control" name="todo-id" aria-label="todo"
+                      value="<?= $todo["id"] ?>">
+                    <button type="submit" class="d-none"></button>
+                  </div>
+                </form>
                 <!-- Sub Todos -->
               </div>
               <div class='modal-footer'>
@@ -136,6 +166,15 @@ $folder_name = $folder_id ? $pdo->query("SELECT * FROM folder WHERE id = $folder
     </div>
   </div>
 </div>
+
+<script>
+window.onload = () => {
+  const modalButton = document.querySelector("<?= "#modal-button-{$todo_focus_id}" ?? "" ?>");
+  modalButton?.click();
+  <?php $todo_focus_id = -1 ?>
+}
+</script>
+
 
 <style>
 .todo-list {

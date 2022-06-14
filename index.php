@@ -13,6 +13,8 @@
 <body class="">
   <?php
   session_start();
+  ob_start();
+
   include_once("src/Route.php");
 
   Route::add('/', function () {
@@ -48,7 +50,7 @@
   }, 'post');
 
   Route::add('/logout', function () {
-    $_SESSION["user_id"] = NULL;
+    session_destroy();
     header("Location: /do-too");
   });
 
